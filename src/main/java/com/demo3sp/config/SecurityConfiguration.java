@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +33,7 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserService();
+        return new CustomUserDetailService();
     }
 
     @Bean
@@ -78,7 +79,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/delete/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers( "/api/**").permitAll()
-                        .requestMatchers("/login","/error","/**").permitAll()
+                        .requestMatchers("/login","/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -89,9 +90,13 @@ public class SecurityConfiguration {
                                 .failureForwardUrl("/login_failure_handler") // Your custom login failure handler
                 )
                 .logout(Customizer.withDefaults())
-//                .exceptionHandling(e -> e
-//                        .accessDeniedPage("/403")
-//                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .invalidSessionUrl("/login")
+                )
+                .exceptionHandling(e -> e
+                        .accessDeniedPage("/403")
+                )
                 .build();
     }
 

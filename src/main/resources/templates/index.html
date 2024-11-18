@@ -1,58 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Manager</title>
+
+</head>
+<body>
+<div align="center">
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout" />
+    </form>
+
+    <h1>Product Manager</h1>
+    <div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+        <a href="new">Create New Product</a>
+    </div>
+
+    <br/><br/>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Made In</th>
+            <th>Price</th>
+
+            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.brand}"></td>
+            <td th:text="${product.madein}"></td>
+            <td th:text="${product.price}"></td>
+
+            <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                <a th:href="@{'/edit/' + ${product.id}}">Edit</a>
+                <a th:href="@{'/delete/' + ${product.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+
+
 <!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org"-->
-<!-- xmlns: xmlns:sec="http://www.w3.org/1999/xhtml" sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">-->
+<!--<html lang="en">-->
 <!--<head>-->
-<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
-<!--&lt;!&ndash;    <title>Product Manager</title>&ndash;&gt;-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Login</title>-->
 <!--</head>-->
 <!--<body>-->
-<!--<div align="center">-->
-<!--    <div sec:authorize="isAuthenticated()">-->
-<!--        Welcome <b><span sec:authentication="name">Username</span></b>-->
-<!--        &nbsp;-->
-<!--        <i><span sec:authentication="principal.authorities">Roles</span></i>-->
-<!--    </div>-->
-
-<!--    <form th:action="@{/logout}" method="post">-->
-<!--        <input type="submit" value="Logout" />-->
-<!--    </form>-->
-
-<!--    <h1>Product Manager</h1>-->
-<!--    <div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">-->
-<!--        <a href="new">Create New Product</a>-->
-<!--    </div>-->
-
-<!--    <br/><br/>-->
-<!--    <table border="1" cellpadding="10">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th>Product ID</th>-->
-<!--            <th>Name</th>-->
-<!--            <th>Brand</th>-->
-<!--            <th>Made In</th>-->
-<!--            <th>Price</th>-->
-
-<!--            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="product : ${products}">-->
-<!--            <td th:text="${product.id}"></td>-->
-<!--            <td th:text="${product.name}"></td>-->
-<!--            <td th:text="${product.brand}"></td>-->
-<!--            <td th:text="${product.madein}"></td>-->
-<!--            <td th:text="${product.price}"></td>-->
-
-<!--            <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
-<!--                <a th:href="@{'/edit/' + ${product.id}}">Edit</a>-->
-<!--                <a th:href="@{'/delete/' + ${product.id}}">Delete</a>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--</div>-->
+<!--<h2>Login Page</h2>-->
 <!--</body>-->
 <!--</html>-->
-
-
-<h1>Product Manager</h1>
